@@ -7,6 +7,7 @@ import android.os.Bundle;
 Start-Button: ID: button_start
 Settings-Button: ID: button_settings
 Gallery-Button: ID: button_gallery
+Dies ist eine TEstzeile zum pushen von Benjo
 */
 
 public class MainActivity extends AppCompatActivity {
