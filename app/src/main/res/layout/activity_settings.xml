@@ -7,43 +7,53 @@
     tools:context="com.example.test.SettingsActivity">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="29dp" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_sound"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <ToggleButton
-        android:id="@+id/toggleButton"
+        android:id="@+id/button_sound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="ToggleButton"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="73dp" />
 
     <ToggleButton
-        android:id="@+id/toggleButton2"
+        android:id="@+id/button_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="ToggleButton"
-        app:layout_constraintEnd_toEndOf="@+id/toggleButton"
-        tools:layout_editor_absoluteY="148dp" />
+        app:layout_constraintEnd_toEndOf="@+id/button_sound"
+        app:layout_constraintTop_toBottomOf="@+id/button_sound" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_sound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:text="Ton an/aus"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="101dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_sound"
+        app:layout_constraintStart_toStartOf="@+id/button_back"
+        app:layout_constraintTop_toTopOf="@+id/button_sound" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Kamera an/aus"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        tools:layout_editor_absoluteY="148dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_camera"
+        app:layout_constraintStart_toStartOf="@+id/button_back"
+        app:layout_constraintTop_toTopOf="@+id/button_camera" />
 </android.support.constraint.ConstraintLayout>
