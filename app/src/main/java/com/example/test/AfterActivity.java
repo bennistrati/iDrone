@@ -7,24 +7,26 @@ import android.view.View;
 import android.widget.Button;
 
 /* Usable xml-elements in this layout:
-Back-Button: ID: button_backSet
-Sound-ToggleButton: ID: button_sound
-Camera-ToggleButton: ID: button_camera
-Sound-Text: ID: text_sound
-Camera-Text: ID: text_camera
+Back-Button: ID: button_backAfter
+Final-Image: ID: image_final
+Save-Button: ID: button_save
+Delete-Button: ID: button_delete
+Velocity-Text: ID: text_velocity
+Time-Text: ID: text_time
+Height-Text: ID: text_height
 */
 
-public class SettingsActivity extends AppCompatActivity {
+public class AfterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_after);
 
-        Button button_backSet;
-        button_backSet = (Button) findViewById(R.id.button_backSet);
+        Button button_backAfter;
+        button_backAfter = (Button) findViewById(R.id.button_backAfter);
 
-        button_backSet.setOnClickListener(new View.OnClickListener() {
+        button_backAfter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 launchMenu();
