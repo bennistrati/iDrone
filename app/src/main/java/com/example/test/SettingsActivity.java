@@ -20,19 +20,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        Button button_backSet;
-        button_backSet = (Button) findViewById(R.id.button_backSet);
-
-        button_backSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                launchMenu();
-            }
-        });
     }
 
-    private void launchMenu(){
+    //Method to return to the main menu
+    public void returnToMenuFromSettings(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

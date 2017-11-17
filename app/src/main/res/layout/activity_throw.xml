@@ -8,10 +8,12 @@
 
     <ImageButton
         android:id="@+id/button_backThrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/button_layout"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:onClick="returnToMenuFromThrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />

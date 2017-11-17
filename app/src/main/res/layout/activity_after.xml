@@ -18,27 +18,32 @@
 
     <ImageButton
         android:id="@+id/button_backAfter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/button_layout"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:onClick="returnToMenuFromAfter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <ImageButton
         android:id="@+id/button_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_layout"
         android:layout_marginEnd="16dp"
+        android:onClick="returnToMenuFromAfter"
         app:layout_constraintEnd_toStartOf="@+id/button_delete"
         app:layout_constraintTop_toTopOf="@+id/button_delete"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
     <ImageButton
         android:id="@+id/button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_layout"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"

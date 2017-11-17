@@ -18,35 +18,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button button_settings;
-        button_settings = (Button) findViewById(R.id.button_settings);
-
-        Button button_start;
-        button_start = (Button) findViewById(R.id.button_start);
-
-        button_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                launchSettings();
-            }
-        });
-
-        button_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                launchThrow();
-            }
-        });
-
     }
 
-    private void launchSettings(){
+    //Method to switch to Settings
+    public void launchSettings(View view){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void launchThrow(){
+    //Method to initialize throw
+    public void launchThrow(View view){
         Intent intent = new Intent(this, ThrowActivity.class);
         startActivity(intent);
     }

@@ -16,19 +16,10 @@ public class ThrowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_throw);
-
-        Button button_backThrow;
-        button_backThrow = (Button) findViewById(R.id.button_backThrow);
-
-        button_backThrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                launchMenu();
-            }
-        });
     }
 
-    private void launchMenu(){
+    //Method to return to the main menu
+    public void returnToMenuFromThrow(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

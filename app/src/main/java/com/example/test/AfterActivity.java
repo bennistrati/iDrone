@@ -22,19 +22,10 @@ public class AfterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after);
-
-        Button button_backAfter;
-        button_backAfter = (Button) findViewById(R.id.button_backAfter);
-
-        button_backAfter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                launchMenu();
-            }
-        });
     }
 
-    private void launchMenu(){
+    //Method to Return to the main menu
+    public void returnToMenuFromAfter(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
