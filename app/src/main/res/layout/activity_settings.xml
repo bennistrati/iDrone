@@ -7,13 +7,11 @@
     tools:context="com.example.test.SettingsActivity">
 
     <ImageButton
-        android:id="@+id/button_back"
+        android:id="@+id/button_backSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_sound"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
@@ -23,9 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
         android:text="ToggleButton"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="73dp" />
+        app:layout_constraintTop_toBottomOf="@+id/button_backSet" />
 
     <ToggleButton
         android:id="@+id/button_camera"
@@ -44,7 +43,7 @@
         android:layout_marginTop="8dp"
         android:text="Ton an/aus"
         app:layout_constraintBottom_toBottomOf="@+id/button_sound"
-        app:layout_constraintStart_toStartOf="@+id/button_back"
+        app:layout_constraintStart_toStartOf="@+id/button_backSet"
         app:layout_constraintTop_toTopOf="@+id/button_sound" />
 
     <TextView
@@ -54,6 +53,6 @@
         android:layout_marginBottom="8dp"
         android:text="Kamera an/aus"
         app:layout_constraintBottom_toBottomOf="@+id/button_camera"
-        app:layout_constraintStart_toStartOf="@+id/button_back"
+        app:layout_constraintStart_toStartOf="@+id/button_backSet"
         app:layout_constraintTop_toTopOf="@+id/button_camera" />
 </android.support.constraint.ConstraintLayout>
