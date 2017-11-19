@@ -10,6 +10,7 @@ import android.widget.Button;
 Start-Button: ID: button_start
 Settings-Button: ID: button_settings
 Gallery-Button: ID: button_gallery
+Main-Icon: ID: image_logo
 */
 
 public class MainActivity extends AppCompatActivity {
