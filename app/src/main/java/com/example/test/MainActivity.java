@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 /* Usable xml-elements in this layout:
 Start-Button: ID: button_start
 Settings-Button: ID: button_settings
@@ -15,11 +16,17 @@ Main-Icon: ID: image_logo
 
 public class MainActivity extends AppCompatActivity {
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
+
+
 
     //Method to switch to Settings
     public void launchSettings(View view){
@@ -31,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     public void launchThrow(View view){
         Intent intent = new Intent(this, ThrowActivity.class);
         startActivity(intent);
+
+
     }
 
 }
