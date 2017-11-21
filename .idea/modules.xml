@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://B:\iDrone\Test2.iml" filepath="B:\iDrone\Test2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://B:\iDrone\app\app.iml" filepath="B:\iDrone\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/iDrone.iml" filepath="$PROJECT_DIR$/iDrone.iml" />
     </modules>
   </component>
