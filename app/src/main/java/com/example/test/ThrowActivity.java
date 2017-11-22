@@ -1,5 +1,6 @@
 package com.example.test;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -37,7 +38,7 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER){
             //x,y,z des accelerometers
-            public float x = sensorEvent.values[0];
+            float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
 
