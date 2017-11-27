@@ -59,4 +59,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/button_camera"
         app:layout_constraintStart_toStartOf="@+id/button_backSet"
         app:layout_constraintTop_toTopOf="@+id/button_camera" />
+
 </android.support.constraint.ConstraintLayout>

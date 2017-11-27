@@ -1,6 +1,7 @@
 package com.example.test;
 
 import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.content.Intent;
 import android.hardware.SensorEvent;

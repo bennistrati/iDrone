@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 
 /* Usable xml-elements in this layout:
@@ -22,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
-
     }
 
 
@@ -32,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public void launchSettings(View view){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
     }
 
     //Method to initialize throw
