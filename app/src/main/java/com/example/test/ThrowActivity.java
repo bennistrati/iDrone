@@ -1,6 +1,8 @@
 package com.example.test;
 
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
+import android.content.Intent;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -27,17 +29,30 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
+    //check about camera
+    private boolean checkCameraHardware(Context context){
+        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            //returns true if a camera is available
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public static Camera getCameraInstance(){
+        Camera c = null;
+    }
 
 
 
 
+    //safes accelerometer data in x,y,z
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         Sensor mySensor = sensorEvent.sensor;
-
+        //turning point
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER){
             //x,y,z des accelerometers
-            public float x = sensorEvent.values[0];
+            float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
 
