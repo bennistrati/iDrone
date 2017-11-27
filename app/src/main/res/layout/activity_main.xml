@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     tools:context="com.example.test.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
@@ -12,7 +11,7 @@
         android:id="@+id/button_start"
         android:layout_width="320dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/startbutton_layout"
@@ -23,21 +22,6 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/image_logo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/background_with_shadow"
-        app:layout_constraintBottom_toTopOf="@+id/button_start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_idrone" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -57,7 +41,6 @@
             android:padding="5dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
-            android:onClick="launchSettings"
             app:srcCompat="@drawable/galery_icon_with_text" />
 
         <ImageButton
@@ -73,6 +56,20 @@
             app:srcCompat="@drawable/settings_icon_with_text" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_idrone_big" />
 
 
 </android.support.constraint.ConstraintLayout>
