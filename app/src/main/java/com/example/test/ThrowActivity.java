@@ -2,23 +2,28 @@ package com.example.test;
 
 import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.content.Intent;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.hardware.Camera;
-import android.hardware.Camera.PictureCallback;
-import android.provider.MediaStore.Files.FileColumns;
 import android.util.Log;
+import android.view.View;
+import android.hardware.camera2.*;
+import android.widget.ImageView;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 /* Usable xml-elements in this layout:
 Back-Button: ID: button_backThrow;
 */
@@ -27,6 +32,10 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     public static final String EXTRA_MESSAGE ="com.example.iDrone.MESSAGE";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap mImageBitmap;
+    private String mCurrentPhotoPath;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,50 +46,54 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    /* Check if this device has a camera */
-    private boolean checkCameraHardware(Context context){
-        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            //this device has a camera
-            return true;
-        }else{
-            //no camera detected
-            return false;
-        }
-    }
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open();// attempt to get a camera isntance, camera.open(int) for accesing specific
-        }catch(Exception e){
-            //Camera is not available (in use or doesnt exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
-    private PictureCallback mPicture = new PictureCallback() {
-
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                Log.d(TAG, "Error creating media file, check storage permissions: " +
-                        e.getMessage());
-                return;
-            }
-
+    //Function to take an image. Still has to be implemented
+    public void takeImage() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
             try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i(TAG, "IOException");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
-    };
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
 
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            try {
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                mImageView.setImageBitmap(mImageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 
@@ -97,16 +110,17 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
-
-
         }
     }
 
-    //accuracy des accelerometer sensors
+    //Genauigkeit des accelerometer sensors
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy){
-
+        /**
+         * Frage an Benjo, warum ist das hier leer? Was muss hier rein? Wann wird diese Funktion aufgerufen?
+         */
     }
+
     //pausiert sensor listener wenn app in hintergrund
     protected void onPause(){
         super.onPause();
@@ -118,11 +132,10 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-
-    //Method to return to the main menu
+    //Method to return to main menu
     public void returnToMenuFromThrow(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
+        finish();
     }
 }
