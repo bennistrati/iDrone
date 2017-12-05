@@ -1,28 +1,21 @@
 package com.example.test;
 
-import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
-import android.content.Intent;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.hardware.camera2.*;
 import android.widget.ImageView;
+import android.hardware.Camera;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.ByteArrayOutputStream;
+
 
 /* Usable xml-elements in this layout:
 Back-Button: ID: button_backThrow;
@@ -31,76 +24,23 @@ Back-Button: ID: button_backThrow;
 public class ThrowActivity extends AppCompatActivity implements SensorEventListener{
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
-    public static final String EXTRA_MESSAGE ="com.example.iDrone.MESSAGE";
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap mImageBitmap;
-    private String mCurrentPhotoPath;
-    private ImageView mImageView;
+    private boolean isFlying;
+    private Camera mCamera;
+    private Bitmap mImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_throw);
+
         senSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    //Function to take an image. Still has to be implemented
-    public void takeImage() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.i(TAG, "IOException");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  // prefix
-                ".jpg",         // suffix
-                storageDir      // directory
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            try {
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
-                mImageView.setImageBitmap(mImageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        isFlying = false;
     }
 
 
-
-
-
-
-    //safes accelerometer data in x,y,z
+    //Saves Accelerometer data in x,y,z and triggers Activity Change
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         Sensor mySensor = sensorEvent.sensor;
@@ -110,18 +50,26 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
+            float move = Math.abs(x) + Math.abs(y) + Math.abs(z);
+            if(!isFlying){
+                if(move > 50){
+                    isFlying = true;
+                }
+            } else if (isFlying){
+                if(move < 1.1){
+                    launchAfterActivity();
+                }
+            }
         }
+
     }
 
-    //Genauigkeit des accelerometer sensors
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy){
-        /**
-         * Frage an Benjo, warum ist das hier leer? Was muss hier rein? Wann wird diese Funktion aufgerufen?
-         */
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
-    //pausiert sensor listener wenn app in hintergrund
+    //Pausiert sensor listener wenn app in hintergrund
     protected void onPause(){
         super.onPause();
         senSensorManager.unregisterListener(this);
@@ -137,5 +85,27 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    //Method to go to the Afer activity
+    public void launchAfterActivity(){
+
+        //mCamera.takePicture(null,null, new JpegPictureCallback());
+
+        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //mImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        //byte[] byteArray = stream.toByteArray();
+
+        Intent intent = new Intent(this, AfterActivity.class);
+        //intent.putExtra("EXTRA_BITMAP", byteArray);
+        startActivity(intent);
+        finish();
+    }
+
+    private class JpegPictureCallback implements Camera.PictureCallback {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            mImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+        }
     }
 }
