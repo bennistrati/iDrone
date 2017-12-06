@@ -15,30 +15,26 @@ Main-Icon: ID: image_logo
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-
-
     //Method to switch to Settings
     public void launchSettings(View view){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+        finish();
     }
 
     //Method to initialize throw
     public void launchThrow(View view){
         Intent intent = new Intent(this, ThrowActivity.class);
         startActivity(intent);
-
-
+        overridePendingTransition(R.anim.zoom_out_in,R.anim.zoom_out_out);
+        finish();
     }
 
 }
