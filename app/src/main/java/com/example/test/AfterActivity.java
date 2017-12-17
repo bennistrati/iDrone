@@ -24,6 +24,7 @@ public class AfterActivity extends AppCompatActivity {
     public ImageView mImageView;
     public Bitmap mImage;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

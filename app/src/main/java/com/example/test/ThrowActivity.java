@@ -7,13 +7,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.hardware.camera2.*;
-
-import java.io.ByteArrayOutputStream;
+import android.widget.TextView;
 
 
 /* Usable xml-elements in this layout:
@@ -24,7 +22,12 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private boolean isFlying;
-    private CameraManager mCamera;
+
+    public TextView text = findViewById(R.id.text);
+    public CameraManager mCamera;
+    public String[] cameraIDs;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,12 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         isFlying = false;
-
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA);
-        mCamera = mCamera.openCamera();
+        try {
+            cameraIDs = mCamera.getCameraIdList();
+            text.setText(cameraIDs[0]);
+        } catch (CameraAccessException e) {
+            text.setText("Sorry, couldn't find CameraDevice.");
+        }
     }
 
     //Saves Accelerometer data in x,y,z and triggers Activity Change
@@ -65,6 +70,7 @@ public class ThrowActivity extends AppCompatActivity implements SensorEventListe
 
     }
 
+    //This method is just an override to empty the onAccuracyChanged Method
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
