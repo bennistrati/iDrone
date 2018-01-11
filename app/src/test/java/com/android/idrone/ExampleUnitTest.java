@@ -1,4 +1,4 @@
-package com.zatackcoder.camera2test;
+package com.android.idrone;
 
 import org.junit.Test;
 

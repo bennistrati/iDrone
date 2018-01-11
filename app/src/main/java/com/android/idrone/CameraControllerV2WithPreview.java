@@ -1,4 +1,4 @@
-package com.zatackcoder.camera2test;
+package com.android.idrone;
 
 import android.Manifest;
 import android.app.Activity;
@@ -100,6 +100,7 @@ public class CameraControllerV2WithPreview {
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
     private boolean mFlashSupported;
     private int mSensorOrientation;
+    public String filePath;
 
 
     public CameraControllerV2WithPreview(Activity activity, AutoFitTextureView textureView) {
@@ -655,6 +656,7 @@ public class CameraControllerV2WithPreview {
 
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+        filePath = mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg";
 
         return mediaFile;
     }

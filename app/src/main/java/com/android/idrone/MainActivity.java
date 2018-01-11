@@ -1,4 +1,4 @@
-package com.zatackcoder.camera2test;
+package com.android.idrone;
 
 import android.Manifest;
 import android.content.Context;
@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private Sensor senAccelerometer;
     private boolean isFlying;
 
+    private String filePath;
+
     CameraControllerV2WithPreview ccv2WithPreview;
     CameraControllerV2WithoutPreview ccv2WithoutPreview;
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
         final Intent intent = getIntent();
 
-        boolean showpreview = intent.getBooleanExtra("showpreview", false);
+        boolean showpreview = intent.getBooleanExtra("showpreview", true);
 
         textureView = (AutoFitTextureView)findViewById(R.id.textureview);
         startstoppreview = (Switch) findViewById(R.id.startstoppreview);
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //Saves Accelerometer data in x,y,z and triggers Activity Change
+    //Saves Accelerometer data in x,y,z, shoots image and triggers Activity Change
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         Sensor mySensor = sensorEvent.sensor;
@@ -154,10 +156,17 @@ public class MainActivity extends AppCompatActivity
                 if(move < 1.3){
                     if(startstoppreview.isChecked() && ccv2WithPreview != null) {
                         ccv2WithPreview.takePicture();
+                        filePath = ccv2WithPreview.filePath;
+                        isFlying = false;
+
+                        Intent intent = new Intent(this, AfterActivity.class);
+                        intent.putExtra("filePath", filePath);
+                        startActivity(intent);
                     } else if(ccv2WithoutPreview != null){
                         ccv2WithoutPreview.openCamera();
                         try { Thread.sleep(20); } catch (InterruptedException e) {}
                         ccv2WithoutPreview.takePicture();
+                        isFlying = false;
                     }
                 }
             }
