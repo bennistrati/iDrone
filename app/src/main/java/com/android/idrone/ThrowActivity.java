@@ -19,8 +19,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MainActivity extends AppCompatActivity
-        implements SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class ThrowActivity extends AppCompatActivity
+        implements SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback, CameraHelper {
 
     /**
      * Sensor Variables
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         startstoppreview = (Switch) findViewById(R.id.startstoppreview);
 
         if(showpreview) {
-            ccv2WithPreview = new CameraControllerV2WithPreview(MainActivity.this, textureView);
+            ccv2WithPreview = new CameraControllerV2WithPreview(ThrowActivity.this, textureView, ThrowActivity.this);
             startstoppreview.setChecked(true);
         } else {
             ccv2WithoutPreview = new CameraControllerV2WithoutPreview(getApplicationContext());
@@ -156,12 +156,7 @@ public class MainActivity extends AppCompatActivity
                 if(move < 1.3){
                     if(startstoppreview.isChecked() && ccv2WithPreview != null) {
                         ccv2WithPreview.takePicture();
-                        filePath = ccv2WithPreview.filePath;
                         isFlying = false;
-
-                        Intent intent = new Intent(this, AfterActivity.class);
-                        intent.putExtra("filePath", filePath);
-                        startActivity(intent);
                     } else if(ccv2WithoutPreview != null){
                         ccv2WithoutPreview.openCamera();
                         try { Thread.sleep(20); } catch (InterruptedException e) {}
@@ -192,5 +187,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
+    @Override
+    public void fileSaved(String filePath) {
+        Intent intent = new Intent(this, AfterActivity.class);
+        intent.putExtra("filePath", filePath);
+        startActivity(intent);
+        finish();
+    }
 }

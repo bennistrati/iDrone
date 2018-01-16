@@ -101,12 +101,14 @@ public class CameraControllerV2WithPreview {
     private boolean mFlashSupported;
     private int mSensorOrientation;
     public String filePath;
+    private CameraHelper cameraHelper;
 
 
-    public CameraControllerV2WithPreview(Activity activity, AutoFitTextureView textureView) {
+    public CameraControllerV2WithPreview(Activity activity, AutoFitTextureView textureView, CameraHelper cameraHelper) {
         this.activity = activity;
         this.textureView = textureView;
         this.textureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        this.cameraHelper = cameraHelper;
         file = getOutputMediaFile();
     }
 
@@ -582,7 +584,7 @@ public class CameraControllerV2WithPreview {
         }
     }
 
-    private static class ImageSaver implements Runnable {
+    private class ImageSaver implements Runnable {
 
         /**
          * The JPEG image
@@ -598,29 +600,23 @@ public class CameraControllerV2WithPreview {
             mFile = file;
         }
 
+        private boolean imageSaved = false;
         @Override
         public void run() {
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            if(!imageSaved) {
+                ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                try (FileOutputStream output = new FileOutputStream(mFile)) {
+                    output.write(bytes);
+                    imageSaved = true;
+                    cameraHelper.fileSaved(mFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    mImage.close();
                 }
-
             }
-
         }
 
     }
