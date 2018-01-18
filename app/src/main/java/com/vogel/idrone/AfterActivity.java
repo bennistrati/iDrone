@@ -1,4 +1,4 @@
-package com.android.idrone;
+package com.vogel.idrone;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,23 +37,22 @@ public class AfterActivity extends AppCompatActivity {
             finalImage = (ImageView) findViewById(R.id.finalImage);
             finalImage.setImageBitmap(myBitmap);
         }
-
-        /*Activity activity = this;
-        Glide.with(activity)
-            .load("/storage/emulated/0/pictures/iDrone/IMG_20180111_184224.jpg")
-            .into(finalImage);*/
     }
 
     public void deleteImage(View view){
         imgFile.delete();
-        Intent intent = new Intent(this, ThrowActivity.class);
+        Toast.makeText(getApplicationContext(), "Bild gelöscht.", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         finish();
     }
 
     public void back(View view){
-        Intent intent = new Intent(this, ThrowActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         finish();
     }
 
@@ -67,5 +67,13 @@ public class AfterActivity extends AppCompatActivity {
         Uri imageUri =  Uri.parse(path);
         share.putExtra(Intent.EXTRA_STREAM, imageUri);
         startActivity(Intent.createChooser(share, "Select"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        finish();
     }
 }

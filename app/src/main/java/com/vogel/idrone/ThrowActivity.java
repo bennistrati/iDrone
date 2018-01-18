@@ -1,4 +1,4 @@
-package com.android.idrone;
+package com.vogel.idrone;
 
 import android.Manifest;
 import android.content.Context;
@@ -13,10 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Switch;
-import android.widget.Toast;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class ThrowActivity extends AppCompatActivity
@@ -29,18 +25,14 @@ public class ThrowActivity extends AppCompatActivity
     private Sensor senAccelerometer;
     private boolean isFlying;
 
-    private String filePath;
-
     CameraControllerV2WithPreview ccv2WithPreview;
-    CameraControllerV2WithoutPreview ccv2WithoutPreview;
 
     AutoFitTextureView textureView;
-    Switch startstoppreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_throw);
 
         /**
          * Initialize SensorManager
@@ -50,56 +42,9 @@ public class ThrowActivity extends AppCompatActivity
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         isFlying = false;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        final Intent intent = getIntent();
-
-        boolean showpreview = intent.getBooleanExtra("showpreview", true);
-
         textureView = (AutoFitTextureView)findViewById(R.id.textureview);
-        startstoppreview = (Switch) findViewById(R.id.startstoppreview);
 
-        if(showpreview) {
-            ccv2WithPreview = new CameraControllerV2WithPreview(ThrowActivity.this, textureView, ThrowActivity.this);
-            startstoppreview.setChecked(true);
-        } else {
-            ccv2WithoutPreview = new CameraControllerV2WithoutPreview(getApplicationContext());
-            startstoppreview.setChecked(false);
-        }
-
-
-        startstoppreview.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-
-                if(startstoppreview.isChecked()) {
-                    intent.putExtra("showpreview", true);
-                    finish();
-                    startActivity(intent);
-
-                } else {
-                    intent.putExtra("showpreview", false);
-                    finish();
-                    startActivity(intent);
-                }
-            }
-        });
-
-        findViewById(R.id.getpicture).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if(startstoppreview.isChecked() && ccv2WithPreview != null) {
-                    ccv2WithPreview.takePicture();
-                } else if(ccv2WithoutPreview != null){
-                    ccv2WithoutPreview.openCamera();
-                    try { Thread.sleep(20); } catch (InterruptedException e) {}
-                    ccv2WithoutPreview.takePicture();
-                }
-
-                Toast.makeText(getApplicationContext(), "Picture Clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ccv2WithPreview = new CameraControllerV2WithPreview(ThrowActivity.this, textureView, ThrowActivity.this);
 
         getPermissions();
     }
@@ -130,7 +75,10 @@ public class ThrowActivity extends AppCompatActivity
             case 1: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission granted
+                    //Permission granted
+                    Intent intent = new Intent(this, ThrowActivity.class);
+                    finish();
+                    startActivity(intent);
                 }
                 return;
             }
@@ -154,13 +102,8 @@ public class ThrowActivity extends AppCompatActivity
                 }
             } else if (isFlying){
                 if(move < 1.3){
-                    if(startstoppreview.isChecked() && ccv2WithPreview != null) {
+                    if(ccv2WithPreview != null) {
                         ccv2WithPreview.takePicture();
-                        isFlying = false;
-                    } else if(ccv2WithoutPreview != null){
-                        ccv2WithoutPreview.openCamera();
-                        try { Thread.sleep(20); } catch (InterruptedException e) {}
-                        ccv2WithoutPreview.takePicture();
                         isFlying = false;
                     }
                 }
@@ -192,6 +135,15 @@ public class ThrowActivity extends AppCompatActivity
         Intent intent = new Intent(this, AfterActivity.class);
         intent.putExtra("filePath", filePath);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         finish();
     }
 }

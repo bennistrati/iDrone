@@ -1,4 +1,4 @@
-package com.android.idrone;
+package com.vogel.idrone;
 
 import android.content.Context;
 import android.util.AttributeSet;

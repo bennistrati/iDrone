@@ -1,4 +1,4 @@
-package com.android.idrone;
+package com.vogel.idrone;
 
 import org.junit.Test;
 
