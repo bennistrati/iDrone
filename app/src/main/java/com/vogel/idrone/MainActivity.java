@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.android.idrone.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Method to launch ThrowActivity
+     * @param view
+     */
     public void launchThrow(View view){
         Intent intent = new Intent(this, ThrowActivity.class);
         startActivity(intent);

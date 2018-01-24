@@ -14,52 +14,47 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+import com.android.idrone.R;
+
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //App requires at least Android Lollipop
 public class ThrowActivity extends AppCompatActivity
         implements SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback, CameraHelper {
 
-    /**
-     * Sensor Variables
-     */
+    //Sensor Variables
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private boolean isFlying;
 
-    CameraControllerV2WithPreview ccv2WithPreview;
-
+    //Camera Variables
+    CameraController cameraController;
     AutoFitTextureView textureView;
 
+    /**
+     * Initialize the Sensor Manager and the textureView, start the CameraController and request Permissions onCreate
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_throw);
 
-        /**
-         * Initialize SensorManager
-         */
+        //This is where we initialize the Sensor Manager and start a Listener on the Accelerometer
         senSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer= senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         isFlying = false;
 
+        //This is where we initialize the Texture View and start the Preview on it/initialize the Camera Controller
         textureView = (AutoFitTextureView)findViewById(R.id.textureview);
+        cameraController = new CameraController(ThrowActivity.this, textureView, ThrowActivity.this);
 
-        ccv2WithPreview = new CameraControllerV2WithPreview(ThrowActivity.this, textureView, ThrowActivity.this);
-
+        //If permissions aren't granted yet, request them
         getPermissions();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        if(ccv2WithPreview != null) {
-//            ccv2WithPreview.closeCamera();
-//        }
-//        if(ccv2WithoutPreview != null) {
-//            ccv2WithoutPreview.closeCamera();
-//        }
-    }
-
+    /**
+     * Method to get requested permissions
+     */
     private void getPermissions(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -69,7 +64,13 @@ public class ThrowActivity extends AppCompatActivity
         }
     }
 
-    @Override //Override from ActivityCompat.OnRequestPermissionsResultCallback Interface
+    /**
+     * Restart Activity (and therefore the Camera Controller) if Permissions get granted
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 1: {
@@ -85,7 +86,10 @@ public class ThrowActivity extends AppCompatActivity
         }
     }
 
-    //Saves Accelerometer data in x,y,z, shoots image and triggers Activity Change
+    /**
+     * Saves Accelerometer data in x,y,z and shoots image
+     * @param sensorEvent
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         Sensor mySensor = sensorEvent.sensor;
@@ -102,8 +106,8 @@ public class ThrowActivity extends AppCompatActivity
                 }
             } else if (isFlying){
                 if(move < 1.3){
-                    if(ccv2WithPreview != null) {
-                        ccv2WithPreview.takePicture();
+                    if(cameraController != null) {
+                        cameraController.takePicture();
                         isFlying = false;
                     }
                 }
@@ -112,24 +116,20 @@ public class ThrowActivity extends AppCompatActivity
 
     }
 
-    //This method is just an override to empty the onAccuracyChanged Method
+    /**
+     * This method is just an override to empty the onAccuracyChanged Method
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    //Pause sensor listener if App goes to background
-    protected void onPause(){
-        super.onPause();
-        senSensorManager.unregisterListener(this);
-    }
-    //Reactivate sensor listener if App comes back to foreground
-    protected void onResume(){
-        super.onResume();
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-
+    /**
+     * Asynchronous Change to After Activity as soon as the file gets saved
+     * @param filePath Path to the saved File
+     */
     @Override
     public void fileSaved(String filePath) {
         Intent intent = new Intent(this, AfterActivity.class);
@@ -139,6 +139,9 @@ public class ThrowActivity extends AppCompatActivity
         finish();
     }
 
+    /**
+     * Go back to MainActivity if the 'back' button is pressed
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);

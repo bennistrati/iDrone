@@ -1,9 +1,8 @@
 package com.vogel.idrone;
 
 /**
- * Created by markus on 16.01.18.
+ * Interface for the asynchronous Activity Change
  */
-
 public interface CameraHelper {
     void fileSaved(String filePath);
 }

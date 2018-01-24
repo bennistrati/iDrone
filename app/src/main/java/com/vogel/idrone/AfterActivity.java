@@ -11,15 +11,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.idrone.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class AfterActivity extends AppCompatActivity {
 
+    //Variables to the the final Image
     private ImageView finalImage;
     private String filePath;
     private File imgFile;
+    private Bitmap imgBitmap;
 
+    /**
+     * Get filePath to the final Image and load Image to ImageView onCreate
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +41,16 @@ public class AfterActivity extends AppCompatActivity {
         finalImage = (ImageView) findViewById(R.id.finalImage);
         imgFile = new File(filePath);
         if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imgBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             finalImage = (ImageView) findViewById(R.id.finalImage);
-            finalImage.setImageBitmap(myBitmap);
+            finalImage.setImageBitmap(imgBitmap);
         }
     }
 
+    /**
+     * Method to delete Image
+     * @param view
+     */
     public void deleteImage(View view){
         imgFile.delete();
         Toast.makeText(getApplicationContext(), "Bild gelöscht.", Toast.LENGTH_SHORT).show();
@@ -49,6 +61,10 @@ public class AfterActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Method to go back to the Main Menu
+     * @param view
+     */
     public void back(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -56,19 +72,25 @@ public class AfterActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Method to share the Image
+     * @param view
+     */
     public void shareImage(View view){
-        Bitmap b = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        imgBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getContentResolver(),
-                b, "Title", null);
+                imgBitmap, "Title", null);
         Uri imageUri =  Uri.parse(path);
         share.putExtra(Intent.EXTRA_STREAM, imageUri);
         startActivity(Intent.createChooser(share, "Select"));
     }
 
+    /**
+     * Go back to MainActivity if back button is pressed
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);

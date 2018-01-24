@@ -51,12 +51,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by rajesh kumar sahanee on 2/9/17.
+ * CameraController to take images and all that Stuff
  */
-
-
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class CameraControllerV2WithPreview {
+public class CameraController {
 
     Activity activity;
 
@@ -73,7 +71,7 @@ public class CameraControllerV2WithPreview {
     }
 
 
-    private static final String TAG = "CCV2WithPreview";
+    private static final String TAG = "CameraController";
     private static final int STATE_PREVIEW = 0;
     private static final int STATE_WAITING_LOCK = 1;
     private static final int STATE_WAITING_PRECAPTURE = 2;
@@ -104,7 +102,7 @@ public class CameraControllerV2WithPreview {
     private CameraHelper cameraHelper;
 
 
-    public CameraControllerV2WithPreview(Activity activity, AutoFitTextureView textureView, CameraHelper cameraHelper) {
+    public CameraController(Activity activity, AutoFitTextureView textureView, CameraHelper cameraHelper) {
         this.activity = activity;
         this.textureView = textureView;
         this.textureView.setSurfaceTextureListener(mSurfaceTextureListener);
