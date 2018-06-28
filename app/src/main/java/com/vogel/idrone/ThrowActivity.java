@@ -1,9 +1,7 @@
 package com.vogel.idrone;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,14 +9,13 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.idrone.R;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //App requires at least Android Lollipop
 public class ThrowActivity extends AppCompatActivity
-        implements SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback, CameraHelper {
+        implements SensorEventListener, CameraHelper {
 
     //Sensor Variables
     private SensorManager senSensorManager;
@@ -47,43 +44,6 @@ public class ThrowActivity extends AppCompatActivity
         //This is where we initialize the Texture View and start the Preview on it/initialize the Camera Controller
         textureView = (AutoFitTextureView)findViewById(R.id.textureview);
         cameraController = new CameraController(ThrowActivity.this, textureView, ThrowActivity.this);
-
-        //If permissions aren't granted yet, request them
-        getPermissions();
-    }
-
-    /**
-     * Method to get requested permissions
-     */
-    private void getPermissions(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                //Requesting permission.
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-    }
-
-    /**
-     * Restart Activity (and therefore the Camera Controller) if Permissions get granted
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //Permission granted
-                    Intent intent = new Intent(this, ThrowActivity.class);
-                    finish();
-                    startActivity(intent);
-                }
-                return;
-            }
-        }
     }
 
     /**
@@ -105,7 +65,7 @@ public class ThrowActivity extends AppCompatActivity
                     isFlying = true;
                 }
             } else if (isFlying){
-                if(move < 1.3){
+                if(move < 1.5){
                     if(cameraController != null) {
                         cameraController.takePicture();
                         isFlying = false;
@@ -132,10 +92,10 @@ public class ThrowActivity extends AppCompatActivity
      */
     @Override
     public void fileSaved(String filePath) {
-        Intent intent = new Intent(this, AfterActivity.class);
+        Intent intent = new Intent(this, ImageActivity.class);
         intent.putExtra("filePath", filePath);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_forward_in,R.anim.slide_forward_out);
         finish();
     }
 
@@ -146,7 +106,7 @@ public class ThrowActivity extends AppCompatActivity
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_back_in, R.anim.slide_back_out);
         finish();
     }
 }

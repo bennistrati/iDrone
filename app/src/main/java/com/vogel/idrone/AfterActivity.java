@@ -42,7 +42,6 @@ public class AfterActivity extends AppCompatActivity {
         imgFile = new File(filePath);
         if(imgFile.exists()){
             imgBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            finalImage = (ImageView) findViewById(R.id.finalImage);
             finalImage.setImageBitmap(imgBitmap);
         }
     }
@@ -57,7 +56,7 @@ public class AfterActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_back_in, R.anim.slide_back_out);
         finish();
     }
 
@@ -68,7 +67,7 @@ public class AfterActivity extends AppCompatActivity {
     public void back(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_forward_in, R.anim.slide_forward_out);
         finish();
     }
 
@@ -95,7 +94,7 @@ public class AfterActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_forward_in, R.anim.slide_forward_out);
         finish();
     }
 }
